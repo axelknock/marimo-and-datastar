@@ -30,4 +30,4 @@ sanic controller -d
 
 The `-d` flag enables automatic restart on file change.
 
-Created with [marimo](https://marimo.io/), [datastar](https://data-star.dev/), and [sanic](https://sanic.dev/en/).
+Created with [marimo](https://marimo.io/), [datastar](https://data-star.dev/), [htpy](https://htpy.dev/), and [sanic](https://sanic.dev/en/).
