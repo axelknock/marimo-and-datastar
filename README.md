@@ -8,6 +8,10 @@ This is a small demonstration of a few concepts. Namely:
  - Using marimo's interactive input widgets to change the rendered html
  - Using an eventbus on the backend (sanic) to keep all client state in sync
 
+[Video demonstration on youtube](https://youtu.be/GD_7JJ9VOLA).
+
+## Running yourself
+
 Setup with [uv](https://docs.astral.sh/uv/):
 
 ```sh
