@@ -1,0 +1,19 @@
+[project]
+name = "getting-thing-done"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "datastar-py",
+    "eventsourcing>=9.4.6",
+    "htpy>=25.5.1",
+    "marimo>=0.13.14",
+    "python-ulid>=3.0.0",
+    "sanic>=25.3.0",
+    "sanic-ext>=24.12.0",
+    "wigglystuff>=0.1.14",
+]
+
+[tool.uv.sources]
+datastar-py = { git = "https://github.com/starfederation/datastar.git", subdirectory = "sdk/python", rev = "develop" }
