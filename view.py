@@ -17,36 +17,36 @@ app = marimo.App(width="columns", html_head_file="head.html")
 
 with app.setup:
     # Initialization code that runs before all other cells
-    from rendering_and_head import setup_rendering, ds_script
     from htpy import (
-        div,
-        input,
-        output,
-        head,
         body,
-        header,
-        nav,
-        section,
-        span,
-        pre,
+        div,
+        head,
+        input,
         main,
+        output,
+        pre,
+        span,
     )
     from htpy import (
         html as root,
     )
     from wigglystuff import ColorPicker
 
+    PORT = 1337
+
+    from rendering_and_head import ds_script, setup_rendering
+
     setup_rendering()
 
 
 @app.function
-def base(color="#000000"):
+def view(color="#000000", port=8000):
     return root[
         head[ds_script()],
         body[
             main[
                 div(
-                    data_on_load=f"@get('http://127.0.0.1:8000/updates')",
+                    data_on_load=f"@get('http://127.0.0.1:{port}/updates')",
                     data_signals_usercount=True,
                     style=f"color: {color}",
                 )[
@@ -87,7 +87,7 @@ def _():
 
 @app.cell
 def _(color_picker):
-    base(color_picker.value["color"])
+    view(color=color_picker.value["color"], port=PORT)
     return
 
 
@@ -101,6 +101,7 @@ def _(mo):
 @app.cell
 def _():
     import marimo as mo
+
     return (mo,)
 
 

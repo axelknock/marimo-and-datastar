@@ -1,17 +1,16 @@
 import asyncio
-from ulid import ULID
-from sanic import Request, Sanic
-from sanic.response import html
-from sanic.log import logger
-from sanic_ext import Extend
+
 from datastar_py.sanic import datastar_respond
 from datastar_py.sse import ServerSentEventGenerator as SSE
-from htpy import html as root, body, main, div, head, pre, span
-from rendering_and_head import ds_script
-from view import base
+from sanic import Request, Sanic
+from sanic.log import logger
+from sanic.response import html
+from sanic_ext import Extend
+from ulid import ULID
 
+from view import PORT, view
 
-app = Sanic("HelloWorldApp")
+app = Sanic("DemoApp")
 app.config.CORS_ORIGINS = "http://localhost"
 Extend(app)
 app.ctx.client_queues = {}
@@ -34,15 +33,10 @@ async def ensure_session_id_cookie(request, response):
 
 @app.get("/")
 async def index(request):
-    return html(base())
+    return html(view(port=PORT))
 
 
-@app.signal("todo_app.todo.created")
-async def log_to_console(**ctx):
-    logger.info(f"New todo created: {ctx}")
-
-
-@app.signal("todo_app.user.<connections_changed>")
+@app.signal("demo_app.user.<connections_changed>")
 async def connections_changed(**ctx):
     usercount = len(app.ctx.client_queues)
     update = SSE.merge_signals({"usercount": usercount})
@@ -59,7 +53,7 @@ async def updates(request: Request):
     session_id = request.ctx.session_id or "anonymous"
     client_queues = app.ctx.client_queues or {}
     client_queue = app.ctx.client_queues[session_id] = asyncio.Queue()
-    await app.dispatch("todo_app.user.connected", context={"session_id": session_id})
+    await app.dispatch("demo_app.user.connected", context={"session_id": session_id})
 
     try:
         while True:
@@ -84,5 +78,5 @@ async def updates(request: Request):
             logger.error(f"An error ocurred while trying to cleanup a connection: {e}")
 
         await app.dispatch(
-            "todo_app.user.disconnected", context={"session_id": request.ctx.session_id}
+            "demo_app.user.disconnected", context={"session_id": request.ctx.session_id}
         )
